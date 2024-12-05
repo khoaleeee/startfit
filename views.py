@@ -2,10 +2,14 @@ from django.shortcuts import render,redirect
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
+from authapp.models import Contact
 
 # Create your views here.
 def Home(request):
     return render(request, "index.html")
+
+def profile(request):
+    return render(request, "profile.html")
 
 def signup(request):
     if request.method=="POST":
@@ -69,3 +73,33 @@ def handleLogout(request):
     logout(request)
     messages.success(request,"Logout Success")    
     return redirect('/login')
+
+
+def contact(request):
+    if request.method=="POST":
+        name=request.POST.get('fullname')
+        email=request.POST.get('email')
+        number=request.POST.get('num')
+        desc=request.POST.get('desc')
+        myquery=Contact(name=name,email=email,phonenumber=number,description=desc)
+        myquery.save()       
+        messages.info(request,"Thanks for Contacting us we will get back you soon")
+        return redirect('/contact')
+        
+    return render(request,"contact.html")
+
+
+def password_reset_view(request):
+    context = {}
+
+    # Depending on the step, set a flag for the template
+    if 'password_reset_done' in request.GET:
+        context['password_reset_done'] = True
+    elif 'password_reset_confirm' in request.GET:
+        context['password_reset_confirm'] = True
+    elif 'password_reset_complete' in request.GET:
+        context['password_reset_complete'] = True
+    else:
+        context['password_reset_done'] = False
+
+    return render(request, 'password_reset.html', context)
