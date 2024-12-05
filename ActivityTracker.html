@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness Activity Tracker</title>
+    
+</head>
+<body>
+    <div class="tracker-container">
+        <h1>Fitness Activity Tracker</h1>
+        <ul class="activity-list" id="activity-list">
+            <li>
+                <input type="checkbox" id="activity1">
+                <label for="activity1">Push-ups - 3 Sets of 15</label>
+                <button class="delete-button" onclick="removeActivity(this)">X</button>
+            </li>
+            <li>
+                <input type="checkbox" id="activity2">
+                <label for="activity2">Running - 20 Minutes</label>
+                <button class="delete-button" onclick="removeActivity(this)">X</button>
+            </li>
+        </ul>
+        <div class="add-activity">
+            <input type="text" id="new-activity" placeholder="Enter new activity">
+            <button class="add-button" onclick="addActivity()">Add</button>
+        </div>
+        <button class="reset-button" onclick="resetTracker()">Reset Tracker</button>
+    </div>
+
+    <script>
+        // Add a new activity
+        function addActivity() {
+            const activityInput = document.getElementById('new-activity');
+            const activityList = document.getElementById('activity-list');
+            const newActivity = activityInput.value.trim();
+
+            if (newActivity) {
+                const li = document.createElement('li');
+                const activityId = `activity${Date.now()}`;
+
+                li.innerHTML = `
+                    <input type="checkbox" id="${activityId}">
+                    <label for="${activityId}">${newActivity}</label>
+                    <button class="delete-button" onclick="removeActivity(this)">X</button>
+                `;
+                activityList.appendChild(li);
+                activityInput.value = ''; // Clear the input field
+            } else {
+                alert('Please enter an activity.');
+            }
+        }
+
+        // Remove an activity
+        function removeActivity(button) {
+            const li = button.parentElement;
+            li.remove();
+        }
+
+        // Reset all checkboxes
+        function resetTracker() {
+            document.querySelectorAll('.activity-list input[type="checkbox"]').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+        }
+    </script>
+</body>
+</html>
